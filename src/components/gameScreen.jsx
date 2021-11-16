@@ -7,6 +7,9 @@ import { useMemo, useEffect } from 'react'
 const GameScreen = (props) => {
 
   const {
+    ladders,
+    snakes,
+    rollagains,
     boardState,
     setBoardState,
     playerCount,
@@ -20,7 +23,6 @@ const GameScreen = (props) => {
     setCurrentPlayer,
     message,
     setMessage,
-    messagePool,
     resizing,
     setResizing,
     dimensions,
@@ -65,68 +67,9 @@ const GameScreen = (props) => {
 
 
 
-  const randomMessage = (messageSet,colour) => {
-    let messageText = ""
-    let messageImage = ""
-    if (messageSet) {
-      let randomMessageIndex = Math.floor(Math.random() * messageSet.length)
-      messageText = messageSet[randomMessageIndex][0]
-      messageImage = messageSet[randomMessageIndex][1]
-      messageSet.splice(1,1)
-    }
-    return {
-      text: messageText,
-      colour: colour,
-      rollagain: false
-    }
-  }
+  
 
-  const ladders = useMemo(() => {
-    const ladderColors = ["#654321","grey","black"]
-    const randomColor = () => ladderColors[Math.floor(Math.random() * ladderColors.length)]
-    let messageSet = messagePool.ladderMessages
-    let messageColour = "rgba(0, 128, 0, 0.7)"
-    return {
-      6: [16,randomColor(),randomMessage(messageSet,messageColour)],
-      10: [19,randomColor(),randomMessage(messageSet,messageColour)],
-      14: [23,randomColor(),randomMessage(messageSet,messageColour)],
-      22: [30,randomColor(),randomMessage(messageSet,messageColour)],
-      28: [36,randomColor(),randomMessage(messageSet,messageColour)],
-      31: [39,randomColor(),randomMessage(messageSet,messageColour)]
-     
-    }
-  },[messagePool])
-
-
-  const snakes = useMemo(() => {
-    const snakeColors = ["yellow","orange","coral","lightgreen"]
-    let messageSet = messagePool.snakeMessages
-    let messageColour = "rgba(255, 0, 0, 0.7)"
-    const randomColor = () => snakeColors[Math.floor(Math.random() * snakeColors.length)]
-    return {  
-      7: [5,randomColor(),randomMessage(messageSet,messageColour)],
-      13: [2,randomColor(),randomMessage(messageSet,messageColour)],
-      20: [11,randomColor(),randomMessage(messageSet,messageColour)],
-      27: [17,randomColor(),randomMessage(messageSet,messageColour)],
-      29: [21,randomColor(),randomMessage(messageSet,messageColour)],
-      37: [35,randomColor(),randomMessage(messageSet,messageColour)],
-      38: [32,randomColor(),randomMessage(messageSet,messageColour)],
-    }
-  },[messagePool])
-
-  const rollagains = useMemo(() => {
-    let messageSet = messagePool.rollagainMessages
-    let messageColour = "rgba(255, 165, 0, 0.7)"
-
-    return {  
-      2: [2,randomMessage(messageSet,messageColour)],
-      4: [2,randomMessage(messageSet,messageColour)],
-      8: [2,randomMessage(messageSet,messageColour)],
-      12: [2,randomMessage(messageSet,messageColour)],
-      17: [2,randomMessage(messageSet,messageColour)],
-    }
-  },[messagePool])
-
+  
 
 
   

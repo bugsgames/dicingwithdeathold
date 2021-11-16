@@ -9,8 +9,6 @@ const Board = (props) => {
   const {rollagains, dimensions, resizing, setResizing, tokenSquares, ladders, snakes, currentPlayer} = props
   
 
-
-
   const squareCoords = [...Array(40)].map((s, i) => {
     let x
     let y = Math.floor(i/5)
@@ -62,7 +60,7 @@ const Board = (props) => {
       
       [...Array(8)].map((f, j) =>
       
-      <Square image={rollagains[i*8 + j + 1] ? "ra-bear-100" : ""} boardDimensions={boardDimensions} zoomLevel={zoomLevel} squareCoords={squareCoords[i*8 + j]} key={i*5 + j} squareNo={i*8 + j}/>)
+      <Square image={rollagains[i*8 + j + 1] ? rollagains[i*8 + j + 1][1].image + "-100-min" : ""} boardDimensions={boardDimensions} zoomLevel={zoomLevel} squareCoords={squareCoords[i*8 + j]} key={i*5 + j} squareNo={i*8 + j}/>)
       
       )
       }
