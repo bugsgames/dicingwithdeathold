@@ -1,6 +1,6 @@
 const Square = (props) => {
 
-  const {zoomLevel, squareCoords, squareNo} = props
+  const {zoomLevel, squareCoords, squareNo, image} = props
 
   return (
     <div className="square" style={{
@@ -15,7 +15,8 @@ const Square = (props) => {
       fontSize: zoomLevel * 1 + "em",
       backgroundColor: (squareCoords.x % 2 && !(squareCoords.y % 2)) || (!(squareCoords.x % 2) && squareCoords.y % 2) ? "green" : "blue"
     }}>
-      <span>{squareNo + 1}</span>
+      <span className="squareno">{squareNo + 1}</span>
+      <span className="squareimage"><img src={window.location.href + `/images/${image}.png`} alt="" /></span>
     </div>
   );
 }

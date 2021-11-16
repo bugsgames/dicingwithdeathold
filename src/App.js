@@ -82,12 +82,10 @@ const App = () => {
           messages[`${type}Messages`] = []
         }
         let message = commasep.join(",").trim()
-        console.log(message.slice(0,1))
         if (message.slice(-1) === "\"" && message.slice(0,1) === "\"") {
           messages[`${type}Messages`].push(message.slice(1,-2))
         } else {
           messages[`${type}Messages`].push(message)
-
         }
       })
       return messages
@@ -100,7 +98,6 @@ const App = () => {
         return response.text();
       })
       .then((csvdata) => {
-        console.log(csvdata)
         setMessagePool(loadMessageData(csvdata))
       })
 

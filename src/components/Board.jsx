@@ -6,7 +6,7 @@ import Snake from './Snake'
 
 const Board = (props) => {
 
-  const {dimensions, resizing, setResizing, tokenSquares, ladders, snakes, currentPlayer} = props
+  const {rollagains, dimensions, resizing, setResizing, tokenSquares, ladders, snakes, currentPlayer} = props
   
 
 
@@ -42,12 +42,10 @@ const Board = (props) => {
   }
   const viewY = (zoomLevel) => {
     let x = zoomLevel * ( (squareCoords[tokenSquares[currentPlayer]].y * boardDimensions.height/8) ) - boardDimensions.height/2
-    console.log(x)
     return x + (boardDimensions.height - dimensions.height)/2
   
     
   }
-  console.log(viewX(zoomLevel),viewY(zoomLevel))
   return (
     <div className="boardViewport">
       <div className="board" style={{
@@ -64,7 +62,7 @@ const Board = (props) => {
       
       [...Array(8)].map((f, j) =>
       
-      <Square boardDimensions={boardDimensions} zoomLevel={zoomLevel} squareCoords={squareCoords[i*8 + j]} key={i*5 + j} squareNo={i*8 + j}/>)
+      <Square image={rollagains[i*8 + j + 1] ? "ra-bear-100" : ""} boardDimensions={boardDimensions} zoomLevel={zoomLevel} squareCoords={squareCoords[i*8 + j]} key={i*5 + j} squareNo={i*8 + j}/>)
       
       )
       }

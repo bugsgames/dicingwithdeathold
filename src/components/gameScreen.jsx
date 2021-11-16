@@ -7,26 +7,26 @@ import { useMemo, useEffect } from 'react'
 const GameScreen = (props) => {
 
   const {
-  boardState,
-  setBoardState,
-  playerCount,
-  tokenSquares,
-  setTokenSquares,
-  dieEnabled,
-  setDieEnabled,
-  lastRoll,
-  setLastRoll,
-  currentPlayer,
-  setCurrentPlayer,
-  message,
-  setMessage,
-  messagePool,
-  resizing,
-  setResizing,
-  dimensions,
-  setDimensions,
-  firstResize,
-  setFirstResize
+    boardState,
+    setBoardState,
+    playerCount,
+    tokenSquares,
+    setTokenSquares,
+    dieEnabled,
+    setDieEnabled,
+    lastRoll,
+    setLastRoll,
+    currentPlayer,
+    setCurrentPlayer,
+    message,
+    setMessage,
+    messagePool,
+    resizing,
+    setResizing,
+    dimensions,
+    setDimensions,
+    firstResize,
+    setFirstResize
   } = props
 
   const rollDie = () => Math.ceil(Math.random()*6)
@@ -67,9 +67,11 @@ const GameScreen = (props) => {
 
   const randomMessage = (messageSet,colour) => {
     let messageText = ""
+    let messageImage = ""
     if (messageSet) {
       let randomMessageIndex = Math.floor(Math.random() * messageSet.length)
-      messageText = messageSet[randomMessageIndex]
+      messageText = messageSet[randomMessageIndex][0]
+      messageImage = messageSet[randomMessageIndex][1]
       messageSet.splice(1,1)
     }
     return {
@@ -191,7 +193,6 @@ const GameScreen = (props) => {
         newPos = 39 - (newPos - 39)
       }
       order.push(newPos)
-      console.log(order)
   
       order.forEach((o,i)=>  setTimeout(() => updateTokenSquare(currentPlayer,o),i * 500))
       setTimeout(() => endTurn(order[order.length-1]), order.length * 500)
@@ -217,6 +218,7 @@ const GameScreen = (props) => {
         turnMessage = snakes[endSquare+1][2]
       } else 
       if (rollagains[endSquare + 1]) {
+        console.log(rollagains[endSquare+1])
         turnMessage = rollagains[endSquare+1][1]
         turnMessage.rollagain = true
         delay = 0
@@ -250,7 +252,7 @@ const GameScreen = (props) => {
 
   return (
     <>
-   <Board resizing={resizing} setResizing={setResizing} dimensions={dimensions} currentPlayer={currentPlayer} tokenSquares={tokenSquares} ladders={ladders} snakes={snakes}/>
+   <Board rollagains={rollagains} resizing={resizing} setResizing={setResizing} dimensions={dimensions} currentPlayer={currentPlayer} tokenSquares={tokenSquares} ladders={ladders} snakes={snakes}/>
    <MessageBox clearMessage={clearMessage} message={message.text} colour={message.colour} />
  
        <div className="dice">
