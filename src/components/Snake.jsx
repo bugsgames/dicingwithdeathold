@@ -17,23 +17,12 @@ const Snake = (props) => {
       transformOrigin: "top center",
       transform: "translate(0,"+ boardDimensions.width/10 * zoomLevel + "px) rotate("+ Math.atan((-startPos.x + endPos.x)/( startPos.y - endPos.y)) *180/Math.PI+"deg)"
       }}>
-         <div style={{height: "100%",
-  width: "20%",
-  position:"absolute",
-  top: 0,
-  left: "40%",
-  backgroundColor: colour,
-}}></div>
 
-      <div style={{
-  height: boardDimensions.width/15 * zoomLevel + "px",
-  width: boardDimensions.width/15 * zoomLevel + "px",
-  position:"absolute",
-  left: "16%",
-  top:  "-2%",
-  backgroundColor: colour,
-  borderRadius: "50%",
-}}></div>
+
+ 
+<img style={{height: "100%",
+zIndex: 10}} src={window.location.href + "images/snake1.png"}/>
+
 
     </div>
   );
