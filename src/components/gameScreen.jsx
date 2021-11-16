@@ -7,6 +7,8 @@ import { useMemo, useEffect } from 'react'
 const GameScreen = (props) => {
 
   const {
+  boardState,
+  setBoardState,
   playerCount,
   tokenSquares,
   setTokenSquares,
@@ -19,7 +21,6 @@ const GameScreen = (props) => {
   message,
   setMessage,
   messagePool,
-  setMessagePool,
   resizing,
   setResizing,
   dimensions,
@@ -60,32 +61,7 @@ const GameScreen = (props) => {
     }
   },[dimensions,resizing,setResizing, firstResize,setDimensions,setFirstResize])
 
-  useEffect(() => {
-    const loadMessageData = (data) => {
-      let messages = {snakeMessages: [], ladderMessages: [], rollagainMessages: []}
-      data.split("\n").forEach(d => {
-        let commasep = d.split(",")
-        let type = commasep.splice(0,1)
-        messages[`${type}Messages`].push(commasep.join(","))
-      })
-      return messages
-    }
-    if (!messagePool) {
-     
-
-      const csvurl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8mb7lgXCb2tO4IBhx7ERMI4s5KjVxFqiaV5SAZ52cMwsgcRnrTTx8nigACKv0o1cYA1c7woHGBvGF/pub?gid=0&single=true&output=csv"
-      fetch(csvurl).then((response) => {
-        return response.text();
-      })
-      .then((csvdata) => {
-        console.log(csvdata)
-        setMessagePool(loadMessageData(csvdata))
-      })
-
-
-    }
-    
-  },[messagePool,setMessagePool])
+  
 
 
 
@@ -151,90 +127,22 @@ const GameScreen = (props) => {
 
 
 
-  const updateTokenSquare = (player,newSquare) => {
-    let newTokens = [...tokenSquares]
-    newTokens[player] = newSquare
-    setTokenSquares(newTokens)
-  }
-
-
-
-  const endTurn = (endSquare) => {
-
-    let delay = 500
-    let turnMessage = false
-    if (endSquare === 39) {
-      turnMessage = {
-        text: "You have won!",
-        colour:"rgba(0, 0, 255, 0.7)",
-        rollagain: false
-      }
-    } else
-    if (ladders[endSquare+1]) {
-      updateTokenSquare(currentPlayer,ladders[endSquare+1][0]-1)
-      turnMessage = ladders[endSquare+1][2]
-    } else
-    if (snakes[endSquare+1]) {
-      updateTokenSquare(currentPlayer,snakes[endSquare+1][0]-1)
-      turnMessage = snakes[endSquare+1][2]
-    } else 
-    if (rollagains[endSquare + 1]) {
-      turnMessage = rollagains[endSquare+1][1]
-      turnMessage.rollagain = true
-      delay = 0
-    } else {
-      delay = 0
-    }
-    setTimeout(() => {
-      if (turnMessage) {
-        setMessage(turnMessage)
-      } else {
-        setDieEnabled(true);
-        setCurrentPlayer(currentPlayer ? 0 : 1);
-      }
-    },delay)
-  }
+  
 
   
   const clearMessage = () => {
+
+    setMessage({})
+    if (playerCount === 1 && ((!message.rollagain && currentPlayer === 0) || (message.rollagain && currentPlayer === 1) )){
+      setTimeout(() => handleDieClick(), 100)
+    } else {
+      setDieEnabled(true);
+    }
     if (!message.rollagain) {
       setCurrentPlayer(currentPlayer ? 0 : 1);
     }
-    setMessage({})
-    setDieEnabled(true);
   }
 
-  const moveToken = (roll) => {
-    let targetPos = tokenSquares[currentPlayer] + roll
-    let newPos = tokenSquares[currentPlayer]
-    let order = []
-    while (targetPos !== newPos) {
-      let sameLevel = Math.ceil((targetPos + 1) /5) === Math.ceil((newPos + 1) /5)
-      if (sameLevel) {
-        newPos = targetPos
-      } else
-      if (newPos % 5 === 4) {
-        newPos += 1
-      } else {
-        newPos = 5 * (Math.ceil((newPos+1)/5)) - 1
-      }
-    
-      if (newPos <= 39) order.push(newPos)
-    }
-
-    if (newPos > 39) {
-      order.push(39)
-      newPos = 39 - (newPos - 39)
-    }
-    order.push(newPos)
-    console.log(order)
-
-    order.forEach((o,i)=>  setTimeout(() => updateTokenSquare(currentPlayer,o),i * 500))
-    setTimeout(() => endTurn(order[order.length-1]), order.length * 500)
-
-    
-
-  }
 
   const handleDieClick = () => {
     setDieEnabled(false)
@@ -246,40 +154,112 @@ const GameScreen = (props) => {
         setLastRoll(roll)
         i+=1
       } else {
-        moveToken(roll)
+        setBoardState(1)
         clearInterval(interval)
       }
     },100)
     
   }
+   useEffect(() => {
 
-    useEffect(() => {
-    if (dieEnabled && currentPlayer === 1 && playerCount === 1) {
-      handleDieClick()
+    const updateTokenSquare = (player,newSquare) => {
+      let newTokens = [...tokenSquares]
+      newTokens[player] = newSquare
+      setTokenSquares(newTokens)
     }
-  },[dieEnabled,currentPlayer,handleDieClick,playerCount])
+
+    const moveToken = (roll) => {
+      let targetPos = tokenSquares[currentPlayer] + roll
+      let newPos = tokenSquares[currentPlayer]
+      let order = []
+      while (targetPos !== newPos) {
+        let sameLevel = Math.ceil((targetPos + 1) /5) === Math.ceil((newPos + 1) /5)
+        if (sameLevel) {
+          newPos = targetPos
+        } else
+        if (newPos % 5 === 4) {
+          newPos += 1
+        } else {
+          newPos = 5 * (Math.ceil((newPos+1)/5)) - 1
+        }
+      
+        if (newPos <= 39) order.push(newPos)
+      }
+  
+      if (newPos > 39) {
+        order.push(39)
+        newPos = 39 - (newPos - 39)
+      }
+      order.push(newPos)
+      console.log(order)
+  
+      order.forEach((o,i)=>  setTimeout(() => updateTokenSquare(currentPlayer,o),i * 500))
+      setTimeout(() => endTurn(order[order.length-1]), order.length * 500)
+  
+    }
+
+    const endTurn = (endSquare) => {
+      let delay = 500
+      let turnMessage = false
+      if (endSquare === 39) {
+        turnMessage = {
+          text: "You have won!",
+          colour:"rgba(0, 0, 255, 0.7)",
+          rollagain: false
+        }
+      } else
+      if (ladders[endSquare+1]) {
+        updateTokenSquare(currentPlayer,ladders[endSquare+1][0]-1)
+        turnMessage = ladders[endSquare+1][2]
+      } else
+      if (snakes[endSquare+1]) {
+        updateTokenSquare(currentPlayer,snakes[endSquare+1][0]-1)
+        turnMessage = snakes[endSquare+1][2]
+      } else 
+      if (rollagains[endSquare + 1]) {
+        turnMessage = rollagains[endSquare+1][1]
+        turnMessage.rollagain = true
+        delay = 0
+      } else {
+        delay = 0
+      }
+      setTimeout(() => {
+        if (turnMessage) {
+          setMessage(turnMessage)
+        } else
+        if (currentPlayer === 0 && playerCount === 1){
+          setTimeout(() => handleDieClick(), 100)
+          setCurrentPlayer(currentPlayer ? 0 : 1);
+
+        } else {
+          setDieEnabled(true);
+          setCurrentPlayer(currentPlayer ? 0 : 1);
+
+        }
+        setBoardState(0)
+      },delay)
+    }
+
+    if (boardState === 1) {
+      moveToken(lastRoll)
+    }
+
+// eslint-disable-next-line react-hooks/exhaustive-deps
+  },[boardState])
 
 
   return (
     <>
    <Board resizing={resizing} setResizing={setResizing} dimensions={dimensions} currentPlayer={currentPlayer} tokenSquares={tokenSquares} ladders={ladders} snakes={snakes}/>
    <MessageBox clearMessage={clearMessage} message={message.text} colour={message.colour} />
-    {messagePool ? 
+ 
        <div className="dice">
 
    <Die player={0} currentPlayer={currentPlayer} disabled={dieEnabled && currentPlayer === 0? false : true} handleDieClick={handleDieClick} number={dieEnabled ? "ROLL" : lastRoll } />
    <Die player={1} currentPlayer={currentPlayer} disabled={dieEnabled && currentPlayer === 1 ? false : true} handleDieClick={handleDieClick} number={dieEnabled ? "ROLL" : lastRoll } />
    </div>
    
-   : 
-   <div className="dice">
-
-   <Die player={0} currentPlayer={currentPlayer} disabled={true} handleDieClick={handleDieClick} number={"WAIT" } />
-   <Die player={1} currentPlayer={currentPlayer} disabled={true} handleDieClick={handleDieClick} number={"WAIT"} />
    
-   </div>
-
-   }
    <p>Current player: {currentPlayer + 1}</p>
    </>
   );
