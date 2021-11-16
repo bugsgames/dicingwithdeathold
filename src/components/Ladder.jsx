@@ -1,5 +1,5 @@
 const Ladder = (props) => {
-  const {boardDimensions, startPos, endPos, zoomLevel} = props
+  const {image, boardDimensions, startPos, endPos, zoomLevel} = props
 
   return (
     <div className="ladder" style={{
@@ -16,7 +16,7 @@ const Ladder = (props) => {
       transform: "translate(0,"+ boardDimensions.width/10 * zoomLevel + "px) rotate("+ Math.atan((-startPos.x + endPos.x)/( startPos.y - endPos.y)) *180/Math.PI+"deg)"
       }}>
 <img style={{height: "100%",
-zIndex: 10}} src={window.location.href + "images/ladder1.png"}/>
+zIndex: 10}} src={window.location.href + `images/${image}.png`} alt=""/>
   
 
     </div>

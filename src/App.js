@@ -106,7 +106,7 @@ const App = () => {
             if (!messages[`${type}Messages`]){
               messages[`${type}Messages`] = []
             }
-            messages[`${type}Messages`].push([record[1],record[2]])
+            messages[`${type}Messages`].push([record[1],record[2],record[3]])
           }
         })
     
@@ -139,6 +139,7 @@ const App = () => {
               return {
                 text: a[0],
                 image: a[1],
+                slimage: a[2],
                 colour: colour,
                 rollagain: false
               }

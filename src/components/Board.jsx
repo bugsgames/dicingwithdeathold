@@ -44,6 +44,22 @@ const Board = (props) => {
   
     
   }
+
+  const checkForSquareImage = (square) => {
+    if (rollagains[square]){
+      return rollagains[square][1].image + "-100-min"
+    } else
+    if (ladders[square]){
+      return ladders[square][2].image + "-100-min"
+    } else
+    if (snakes[square]){
+      return snakes[square][2].image + "-100-min"
+    } 
+    else {
+      return ""
+    }
+  }
+
   return (
     <div className="boardViewport">
       <div className="board" style={{
@@ -60,13 +76,13 @@ const Board = (props) => {
       
       [...Array(8)].map((f, j) =>
       
-      <Square image={rollagains[i*8 + j + 1] ? rollagains[i*8 + j + 1][1].image + "-100-min" : ""} boardDimensions={boardDimensions} zoomLevel={zoomLevel} squareCoords={squareCoords[i*8 + j]} key={i*5 + j} squareNo={i*8 + j}/>)
+      <Square image={checkForSquareImage(i*8 + j + 1)} boardDimensions={boardDimensions} zoomLevel={zoomLevel} squareCoords={squareCoords[i*8 + j]} key={i*5 + j} squareNo={i*8 + j}/>)
       
       )
       }
    
-      {Object.keys(snakes).map((s,i) => squareCoords[s-1] && squareCoords[snakes[s][0]-1] ? <Snake boardDimensions={boardDimensions} zoomLevel={zoomLevel} key={i} colour={snakes[s][1]} endPos={squareCoords[s-1]} startPos={squareCoords[snakes[s][0]-1]}/> : "") }
-      {Object.keys(ladders).map((l,i) => squareCoords[l-1] && squareCoords[ladders[l][0]-1] ? <Ladder boardDimensions={boardDimensions} zoomLevel={zoomLevel} key={i} colour={ladders[l][1]} startPos={squareCoords[l-1]} endPos={squareCoords[ladders[l][0]-1]}/> : "") }
+      {Object.keys(snakes).map((s,i) => squareCoords[s-1] && squareCoords[snakes[s][0]-1] ? <Snake boardDimensions={boardDimensions} zoomLevel={zoomLevel} key={i} image={snakes[s][2].slimage} endPos={squareCoords[s-1]} startPos={squareCoords[snakes[s][0]-1]}/> : "") }
+      {Object.keys(ladders).map((l,i) => squareCoords[l-1] && squareCoords[ladders[l][0]-1] ? <Ladder boardDimensions={boardDimensions} zoomLevel={zoomLevel} key={i} image={ladders[l][2].slimage} startPos={squareCoords[l-1]} endPos={squareCoords[ladders[l][0]-1]}/> : "") }
       
       {[1,0].map(n => 
         <Token key={n} resizing={resizing} setResizing={setResizing} boardDimensions={boardDimensions} zoomLevel={zoomLevel} tokenNo={n+1} opPosition={squareCoords[tokenSquares[n ? 0 : 1]]}  position={squareCoords[tokenSquares[n]]}   />

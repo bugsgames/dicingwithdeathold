@@ -2,7 +2,7 @@ import Board from "./Board"
 import Die from "./Die"
 import MessageBox from "./MessageBox"
 
-import { useMemo, useEffect } from 'react'
+import { useEffect } from 'react'
 
 const GameScreen = (props) => {
 

@@ -1,5 +1,5 @@
 const Snake = (props) => {
-  const {boardDimensions, colour, startPos, endPos, zoomLevel} = props
+  const {boardDimensions, image, startPos, endPos, zoomLevel} = props
 
 
   return (
@@ -21,7 +21,7 @@ const Snake = (props) => {
 
  
 <img style={{height: "100%",
-zIndex: 10}} src={window.location.href + "images/snake1.png"}/>
+zIndex: 10}} src={window.location.href + `images/${image}.png` } alt=""/>
 
 
     </div>
