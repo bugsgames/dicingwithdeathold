@@ -1,14 +1,25 @@
-
+import ReactMarkdown from 'react-markdown'
 
 function EndScreen (props) {
 
-  const {restartGame} = props
+  const {messagePool, restartGame} = props
 
   
 
   return (
    <>
-   <p>A player won, I assume!</p> <div onClick={restartGame} style={{ 
+       <h1>DICING WITH DEATH</h1>
+
+   {String(messagePool.outroMessages[0][0]).split("<<").map ( p =>
+  p.trim().length > 0 ? <p>
+  
+    <ReactMarkdown>{p}</ReactMarkdown>
+
+  
+  </p> : <p className="spacer"></p>)
+}
+   
+   <div onClick={restartGame} style={{ 
       display: "flex",
       justifyContent: "center",
       flexDirection: "column",

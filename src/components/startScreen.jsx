@@ -1,4 +1,5 @@
 
+import ReactMarkdown from 'react-markdown'
 
 function StartScreen (props) {
 
@@ -7,52 +8,29 @@ function StartScreen (props) {
   
 
   return (
-   <> <p>
-     {messagePool.introMessages[0]}
-    </p>
-    <div style={{display: "flex",
-      justifyContent: "center",
-      flexDirection: "column",
-      alignItems: "center",
-      width: "50%",
-      marginTop: "5em",}}>
-    <div onClick={() => startGame(2)} style={{ 
-     
-      fontSize: "2em",
-      border: "5px black solid",
-      paddingLeft: "0.5em",
-      paddingRight: "0.5em",
-      width: "100%",
-      display: "flex",
-
-      height: "4em",
-      justifyContent: "center",
-      flexDirection: "column",
-      alignItems: "center",
-
-    }} >
+   <> 
+   <h1 className="title">DICING WITH DEATH</h1>
+   <p className="instructionsTitle">INSTRUCTIONS</p>
+   {String(messagePool.introMessages[0][0]).split("<<").map ( (p, i) =>
+  p.trim().length > 0 ? <p key={i} className="intro">
+    
+    
+    
+    <ReactMarkdown>{p}</ReactMarkdown>
+    
+    </p> :  <p key={i} className="spacer"></p>)
+}
+ 
+    <div className="startButtons" >
+    <div className="startButton" onClick={() => startGame(2)}  >
       
       <span>PLAY WITH 2 PEOPLE</span>
       
       </div>
       
-      <div onClick={() => startGame(1)} style={{ 
-      marginTop: "1em",
-      fontSize: "2em",
-      border: "5px black solid",
-      height: "4em",
-      display: "flex",
-      justifyContent: "center",
-      flexDirection: "column",
-      alignItems: "center",
-      paddingLeft: "0.5em",
-      paddingRight: "0.5em",
-      width: "100%",
-
-
-    }} >
+      <div className="startButton" onClick={() => startGame(1)}  >
       
-      <span>PLAY AGAINST A COMPUTER</span>
+      <span>PLAY WITH COMPUTER</span>
       
       </div>
       </div></>

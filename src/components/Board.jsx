@@ -60,6 +60,21 @@ const Board = (props) => {
     }
   }
 
+  const checkForBgColor = (square) => {
+    if (rollagains[square]){
+      return "lightblue"
+    } else
+    if (ladders[square]){
+      return "lightgreen"
+    } else
+    if (snakes[square]){
+      return "lightsalmon"
+    } 
+    else {
+      return "white"
+    }
+  }
+
   return (
     <div className="boardViewport">
       <div className="board" style={{
@@ -76,7 +91,7 @@ const Board = (props) => {
       
       [...Array(8)].map((f, j) =>
       
-      <Square image={checkForSquareImage(i*8 + j + 1)} boardDimensions={boardDimensions} zoomLevel={zoomLevel} squareCoords={squareCoords[i*8 + j]} key={i*5 + j} squareNo={i*8 + j}/>)
+      <Square bgColor={checkForBgColor(i*8 + j + 1)} image={checkForSquareImage(i*8 + j + 1)} boardDimensions={boardDimensions} zoomLevel={zoomLevel} squareCoords={squareCoords[i*8 + j]} key={i*5 + j} squareNo={i*8 + j}/>)
       
       )
       }

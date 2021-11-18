@@ -1,55 +1,35 @@
+import d1 from './../images/d1-250-min.png'
+import d2 from './../images/d2-250-min.png'
+import d3 from './../images/d3-250-min.png'
+import d4 from './../images/d4-250-min.png'
+import d5 from './../images/d5-250-min.png'
+import d6 from './../images/d6-250-min.png'
+
+
 const Die = (props) => {
 
   const {player, currentPlayer, disabled, handleDieClick, number} = props
   
+  const faces = {
+    1: d1,
+    2: d2,
+    3: d3,
+    4: d4,
+    5: d5,
+    6: d6
+  }
+
   const dieColor = (player, disabled) => {
     if (disabled) {
-      return "gray"
+      return "white"
     } else
     if (player) {
-      return "yellow"
-    } else {
       return "red"
+    } else {
+      return "yellow"
     }
   }
-  const dotStyle = {
-    height: 100/6 + "%",
-    width: 100/6 + "%",
-    backgroundColor: dieColor(player,false),
-    borderRadius: "50%",
-    position: "absolute",
-    display: "inline-block"
-  }
-  const dots = { 1: <div style={{...dotStyle, top: 250/6 + "%", left: 250/6 + "%"}}></div>,
-    2: <><div style={{...dotStyle, top: 100/6 + "%", left: 100/6 + "%"}}></div><div style={{...dotStyle, top: 400/6 + "%", left: 400/6 + "%"}}></div></>,
-    3: <>
-      <div style={{...dotStyle, top: 100/6 + "%", left: 100/6 + "%"}}></div>
-      <div style={{...dotStyle, top: 250/6 + "%", left: 250/6 + "%"}}></div>
-      <div style={{...dotStyle, top: 400/6 + "%", left: 400/6 + "%"}}></div>
-    </>,
-    4: <>
-      <div style={{...dotStyle, top: 100/6 + "%", left: 100/6 + "%"}}></div>
-      <div style={{...dotStyle, top: 100/6 + "%", left: 400/6 + "%"}}></div>
-      <div style={{...dotStyle, top: 400/6 + "%", left: 10}}></div>
-      <div style={{...dotStyle, top: 400/6 + "%", left: 400/6 + "%"}}></div>
-    </>,
-    5: <>
-     <div style={{...dotStyle, top: 100/6 + "%", left: 100/6 + "%"}}></div>
-     <div style={{...dotStyle, top: 100/6 + "%", left: 400/6 + "%"}}></div>
-     <div style={{...dotStyle, top: 250/6 + "%", left: 250/6 + "%"}}></div>
-     <div style={{...dotStyle, top: 400/6 + "%", left: 100/6 + "%"}}></div>
-     <div style={{...dotStyle, top: 400/6 + "%", left: 400/6 + "%"}}></div>
-    </>,
-    6: <>
-      <div style={{...dotStyle, top: 100/6 + "%", left: 100/6 + "%"}}></div>
-      <div style={{...dotStyle, top: 100/6 + "%", left: 400/6 + "%"}}></div>
-      <div style={{...dotStyle, top: 250/6 + "%", left: 100/6 + "%"}}></div>
-      <div style={{...dotStyle, top: 250/6 + "%", left: 400/6 + "%"}}></div>
-      <div style={{...dotStyle, top: 400/6 + "%", left: 100/6 + "%"}}></div>
-      <div style={{...dotStyle, top: 400/6 + "%", left:  400/6 + "%"}}></div>
-    </>,
 
-  }
   
   return (
     <div onClick={!disabled ? handleDieClick : undefined} className="die" style={{
@@ -57,16 +37,35 @@ const Die = (props) => {
       marginTop: 10,
       display: "flex",
       height: 80,
-      backgroundColor: "black",
       color: dieColor(player,disabled),
       position: "relative",
       alignItems: "center",
       justifyContent: "center"
     }}>
-      { currentPlayer === player ?
-      (dots[number] ? dots[number] : number) : "WAIT"
-       }
-      
+
+      {currentPlayer === player ? 
+       <img style={{
+        width: "100%"
+      }} src={faces[number]} alt="" /> :  <span  style={{
+        position: "absolute",
+        width: "100%",
+      }}>
+  WAIT
+
+      </span>
+    }
+      <span  style={{
+        position: "absolute",
+        width: "75%",
+        backgroundColor:'rgba(0,0,0,0.8)'
+      }}>
+
+        { disabled ? "" : 
+        
+        ("ROLL")
+        }
+
+      </span>
     </div>
   );
 }

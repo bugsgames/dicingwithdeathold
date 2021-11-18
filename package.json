@@ -1,18 +1,24 @@
 {
-  "name": "snakes-ladders",
+  "name": "dicing-with-death",
   "homepage": ".",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
     "@material-ui/utils": "^4.11.2",
+    "@react-hook/window-size": "^3.0.7",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "csv-parse": "^4.16.3",
     "react": "^17.0.2",
+    "react-confetti": "^6.0.1",
     "react-dom": "^17.0.2",
+    "react-markdown": "^7.1.0",
     "react-scripts": "4.0.3",
     "react-spring": "^9.2.4",
+    "use-sound": "^4.0.1",
     "web-vitals": "^1.0.1"
   },
   "scripts": {

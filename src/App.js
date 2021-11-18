@@ -3,10 +3,18 @@ import './App.css';
 import StartScreen from './components/startScreen.jsx'
 import EndScreen from './components/endScreen.jsx'
 import GameScreen from './components/gameScreen.jsx'
+import { VolumeOff, VolumeUp } from '@material-ui/icons';
 
-import { useState,useEffect } from 'react'
+import { useState,useEffect } from 'react';
+import {useWindowSize} from '@react-hook/window-size';
+import Confetti from 'react-confetti'
+
+const parse = require('csv-parse')
 
 const App = () => {
+  const [width, height] = useWindowSize()
+
+  const [confetti,setConfetti] = useState(false)
   const [gameState,setGameState] = useState(0)
   const [firstResize,setFirstResize] = useState(false)
   const [tokenSquares,setTokenSquares] = useState([0,0])
@@ -25,26 +33,37 @@ const App = () => {
     width: 600,
     height: 600 * 1.6
   });
-    const startGame = (playerCount) => {
-      setPlayerCount(playerCount)
-      setGameState(1)
+  const [soundOn,setSoundOn] = useState(true)
 
+  const startGame = (playerCount) => {
+    setPlayerCount(playerCount)
+    setGameState(1)
   }
 
   const restartGame = () => {
-    
+    setConfetti(false)
+    setGameState(0)
+    setTokenSquares([0,0])
+    setDieEnabled(true)
+    setCurrentPlayer(0)
+    setMessage({})
+    setPlayerCount(0)
+    setBoardState(0)
   }
 
 
   const displayGameState = (gameState) => {
     if (!messagePool) {
-      return ""
+      return <h1 className="title">DICING WITH DEATH</h1>
     } else
     if (gameState === 0) {
       return <StartScreen messagePool={messagePool} startGame={startGame} />
     } else
     if (gameState === 1) {
       return <GameScreen
+        setConfetti={setConfetti}
+        soundOn={soundOn}
+        setGameState={setGameState}
         boardState={boardState}
         setBoardState={setBoardState}
         playerCount={playerCount}
@@ -71,7 +90,7 @@ const App = () => {
         rollagains={rollagains}
         />
     } else {
-      return <EndScreen restartGame={restartGame} />
+      return <EndScreen messagePool={messagePool} restartGame={restartGame} />
     }
 
 
@@ -80,19 +99,18 @@ const App = () => {
 
   useEffect(() => {
     
-    if (!messagePool) {
-     
 
       
-      
-      const loadMessageData = (parser,data) => {
-        data.split("\n").forEach(d => 
-          parser.write(d)
-        )
-      }
+   
       if (!messagePool) {
+
+        const loadMessageData = (parser,data) => {
+          data.split("\n").forEach(d => 
+            parser.write(d)
+          )
+        }
         
-        const parse = require('csv-parse')
+
         let messages = {}
         const parser = parse({
           delimiter: ','
@@ -151,7 +169,7 @@ const App = () => {
           if (!ladders) {
 
             const ladderColors = ["#654321","grey","black"]
-            let ladderMessageColour = "rgba(0, 128, 0, 0.7)"
+            let ladderMessageColour = "rgba(0, 128, 0, 0.8)"
             let ladderMessageSet = randomMessageArray(messages.ladderMessages,ladderMessageColour)
 
             setLadders({
@@ -167,7 +185,7 @@ const App = () => {
           if (!snakes) {
             const snakeColors = ["yellow","orange","coral","lightgreen"]
 
-            let snakeMessageColour = "rgba(255, 0, 0, 0.7)"
+            let snakeMessageColour = "rgba(255, 0, 0, 0.8)"
             let snakeMessageSet = randomMessageArray(messages.snakeMessages,snakeMessageColour)
 
             setSnakes({  
@@ -182,7 +200,7 @@ const App = () => {
           }
           
           if (!rollagains)  {
-            let rollagainMessageColour = "rgba(255, 165, 0, 0.7)"
+            let rollagainMessageColour = "rgba(255, 165, 0, 0.8)"
             let rollagainMessageSet = randomMessageArray(messages.rollagainMessages,rollagainMessageColour)
 
 
@@ -200,23 +218,40 @@ const App = () => {
       }
 
 
-    }
+    
     
   },[messagePool,setMessagePool,ladders,snakes,rollagains])
 
-  
+  const soundToggle = () => {
+    setSoundOn(soundOn ? false : true)
+  }
 
   return (
-
+    <>
     <div id="container" style={{
       display: 'flex',
       flexDirection: 'column',
       alignItems: "center",
       justifyContent: "center",
     }}>
-      <h1>{"Dicing With Death"}</h1>
     {displayGameState(gameState)}
+    <div id="volumecontrol" onClick={soundToggle}>
+      {
+        soundOn ?  <VolumeUp style={{ fontSize: 40 }}  /> : <VolumeOff style={{ fontSize: 40 }}  />
+      }
+
     </div>
+ 
+    </div>
+      
+       {confetti ? 
+        <div id="confetti" style={{zIndex: 50}}>
+     <Confetti
+       width={width}
+       height={height}
+     />      </div>
+      : ""}
+     </>
   )
 }
 
